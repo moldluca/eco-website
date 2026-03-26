@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco Tracker | Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-shape bg-shape-left"></div>
+  <div class="bg-shape bg-shape-right"></div>
+
+  <header class="hero compact-hero">
+    <nav class="nav container">
+      <div class="brand">ECO TRACKER</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="history.html">Istoric</a>
+      </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </nav>
+  </header>
+
+  <main class="container page-main" id="dashboard">
+    <section class="panel dashboard-panel panel-card">
+      <h2>Dashboard zilnic</h2>
+      <p class="muted">Introdu valorile de azi și calculează scorul folosind formula proiectului.</p>
+
+      <form id="ecoForm" class="eco-form">
+        <label>
+          💧 Apă (litri)
+          <input type="number" id="waterInput" min="0" step="0.1" required />
+        </label>
+
+        <label>
+          ⚡ Energie (kWh)
+          <input type="number" id="energyInput" min="0" step="0.1" required />
+        </label>
+
+        <label>
+          🚗 Transport (km)
+          <input type="number" id="transportInput" min="0" step="0.1" required />
+        </label>
+
+        <button type="submit" class="calc-btn">Calculate Eco Score</button>
+      </form>
+
+      <div class="result-block" id="resultBlock">
+        <div>
+          <p class="label">Eco Score</p>
+          <p id="ecoScoreResult" class="value">-</p>
+        </div>
+        <div>
+          <p class="label">Badge</p>
+          <p id="badgeResult" class="value">-</p>
+        </div>
+      </div>
+
+      <p class="formula">
+        Formula: <strong>Eco Score = 100 - (apa*0.2 + energie*0.3 + transport*0.5)</strong>
+      </p>
+    </section>
+
+    <section class="panel chart-panel panel-card" id="weeklyPanel">
+      <div class="panel-title-row">
+        <h2>Evoluție săptămânală</h2>
+        <div class="action-row">
+          <button id="exportPngBtn" class="ghost-btn" type="button">Export PNG</button>
+          <button id="resetWeekBtn" class="ghost-btn danger" type="button">Reset săptămână</button>
+        </div>
+      </div>
+      <canvas id="ecoChart" aria-label="Grafic scor eco pe zile"></canvas>
+    </section>
+
+    <section class="panel recommendations-panel panel-card">
+      <h2>Recomandări inteligente</h2>
+      <ul id="recommendationsList" class="recommendations-list"></ul>
+    </section>
+
+    <section class="panel impact-panel panel-card">
+      <h2>Impact vizual</h2>
+      <div class="impact-grid">
+        <article>
+          <p class="impact-number" id="treesSaved">0</p>
+          <p>🌱 Copaci salvați</p>
+        </article>
+        <article>
+          <p class="impact-number" id="waterSaved">0 L</p>
+          <p>🌊 Apă economisită</p>
+        </article>
+        <article>
+          <p class="impact-number" id="co2Reduced">0 kg</p>
+          <p>CO₂ redus</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

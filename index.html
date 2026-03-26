@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eco Tracker | Home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-shape bg-shape-left"></div>
+  <div class="bg-shape bg-shape-right"></div>
+
+  <header class="hero" id="home">
+    <nav class="nav container">
+      <div class="brand">ECO TRACKER</div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="history.html">Istoric</a>
+      </div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
+    </nav>
+
+    <div class="hero-content container">
+      <p class="eyebrow">Sustainability Score Platform</p>
+      <h1>Track your lifestyle. Save the planet.</h1>
+      <div class="hero-score-card panel-card">
+        <p>Scorul tău eco curent</p>
+        <div class="animated-score" id="animatedHeroScore">72<span>/100</span> 🌱</div>
+      </div>
+      <a href="dashboard.html" class="cta-btn">Start Tracking</a>
+    </div>
+  </header>
+
+  <script src="script.js"></script>
+</body>
+</html>
