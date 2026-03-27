@@ -42,6 +42,8 @@ function initDashboardPage() {
     return;
   }
 
+  ensureDataShape();
+
   const waterInput = document.getElementById("waterInput");
   const energyInput = document.getElementById("energyInput");
   const transportInput = document.getElementById("transportInput");
@@ -49,6 +51,7 @@ function initDashboardPage() {
   const ecoScoreResult = document.getElementById("ecoScoreResult");
   const badgeResult = document.getElementById("badgeResult");
   const recommendationsList = document.getElementById("recommendationsList");
+  const formFeedback = document.getElementById("formFeedback");
 
   const treesSavedEl = document.getElementById("treesSaved");
   const waterSavedEl = document.getElementById("waterSaved");
@@ -56,6 +59,7 @@ function initDashboardPage() {
 
   const exportPngBtn = document.getElementById("exportPngBtn");
   const resetWeekBtn = document.getElementById("resetWeekBtn");
+  const calculateBtn = document.getElementById("calculateBtn");
 
   hydrateInputs(waterInput, energyInput, transportInput);
   initChart();
@@ -63,36 +67,58 @@ function initDashboardPage() {
   renderRecommendations(recommendationsList, data.score);
   renderImpact(treesSavedEl, waterSavedEl, co2ReducedEl, data.score);
 
-  ecoForm.addEventListener("submit", (event) => {
+  const handleEcoCalculation = (event) => {
     event.preventDefault();
 
-    const water = Number(waterInput.value);
-    const energy = Number(energyInput.value);
-    const transport = Number(transportInput.value);
+    try {
+      ensureDataShape();
 
-    if ([water, energy, transport].some((value) => Number.isNaN(value) || value < 0)) {
-      return;
+      const water = parseInputNumber(waterInput.value);
+      const energy = parseInputNumber(energyInput.value);
+      const transport = parseInputNumber(transportInput.value);
+
+      if ([water, energy, transport].some((value) => Number.isNaN(value) || !Number.isFinite(value) || value < 0)) {
+        if (formFeedback) {
+          formFeedback.textContent = "Completează valori numerice valide (ex: 10 sau 10.5).";
+        }
+        return;
+      }
+
+      if (formFeedback) {
+        formFeedback.textContent = "";
+      }
+
+      // Formula ceruta: 100 - (apa*0.2 + energie*0.3 + transport*0.5)
+      const rawScore = 100 - (water * 0.2 + energy * 0.3 + transport * 0.5);
+      const score = clamp(roundToTwo(rawScore), 0, 100);
+
+      data.water = water;
+      data.energy = energy;
+      data.transport = transport;
+      data.score = score;
+
+      const todayIndex = getMondayFirstDayIndex(new Date());
+      data.weeklyScores[todayIndex] = score;
+
+      saveData();
+
+      renderDashboardScore(ecoScoreResult, badgeResult, score);
+      renderRecommendations(recommendationsList, score);
+      renderImpact(treesSavedEl, waterSavedEl, co2ReducedEl, score);
+      updateChart();
+    } catch (error) {
+      console.error("Calculate Eco Score failed", error);
+      if (formFeedback) {
+        formFeedback.textContent = "A apărut o eroare la calcul. Reîncarcă pagina și încearcă din nou.";
+      }
     }
+  };
 
-    // Formula ceruta: 100 - (apa*0.2 + energie*0.3 + transport*0.5)
-    const rawScore = 100 - (water * 0.2 + energy * 0.3 + transport * 0.5);
-    const score = clamp(roundToTwo(rawScore), 0, 100);
+  ecoForm.addEventListener("submit", handleEcoCalculation);
 
-    data.water = water;
-    data.energy = energy;
-    data.transport = transport;
-    data.score = score;
-
-    const todayIndex = getMondayFirstDayIndex(new Date());
-    data.weeklyScores[todayIndex] = score;
-
-    saveData();
-
-    renderDashboardScore(ecoScoreResult, badgeResult, score);
-    renderRecommendations(recommendationsList, score);
-    renderImpact(treesSavedEl, waterSavedEl, co2ReducedEl, score);
-    updateChart();
-  });
+  if (calculateBtn) {
+    calculateBtn.addEventListener("click", handleEcoCalculation);
+  }
 
   if (exportPngBtn) {
     exportPngBtn.addEventListener("click", exportWeeklyPng);
@@ -235,7 +261,7 @@ function initChart() {
 }
 
 function updateChart() {
-  if (!chart) {
+  if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
     return;
   }
 
@@ -257,6 +283,8 @@ function exportWeeklyPng() {
 }
 
 function resetCurrentWeek(ecoScoreResult, badgeResult, recommendationsList, treesSavedEl, waterSavedEl, co2ReducedEl) {
+  ensureDataShape();
+
   const hasAnyScore = data.weeklyScores.some((score) => score !== null);
 
   if (hasAnyScore) {
@@ -360,7 +388,20 @@ function normalizeWeeklyScores(value) {
 }
 
 function saveData() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Saving eco tracker data failed", error);
+  }
+}
+
+function ensureDataShape() {
+  if (!Array.isArray(data.weeklyScores)) {
+    data.weeklyScores = [...defaultData.weeklyScores];
+  }
+  if (!Array.isArray(data.history)) {
+    data.history = [];
+  }
 }
 
 function getMondayFirstDayIndex(date) {
@@ -394,4 +435,17 @@ function clamp(value, min, max) {
 
 function roundToTwo(value) {
   return Math.round(value * 100) / 100;
+}
+
+function parseInputNumber(rawValue) {
+  if (typeof rawValue !== "string") {
+    return Number.NaN;
+  }
+
+  const normalized = rawValue.trim().replace(",", ".");
+  if (!normalized) {
+    return Number.NaN;
+  }
+
+  return Number(normalized);
 }

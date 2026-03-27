@@ -21,6 +21,7 @@
         <a href="index.html">Home</a>
         <a href="dashboard.html" class="active">Dashboard</a>
         <a href="history.html">Istoric</a>
+        <a href="recomandari-mediu.html">Ghid Mediu</a>
       </div>
       <button id="themeToggle" class="theme-toggle" aria-label="Toggle dark mode">Dark</button>
     </nav>
@@ -31,7 +32,7 @@
       <h2>Dashboard zilnic</h2>
       <p class="muted">Introdu valorile de azi și calculează scorul folosind formula proiectului.</p>
 
-      <form id="ecoForm" class="eco-form">
+      <form id="ecoForm" class="eco-form" novalidate>
         <label>
           💧 Apă (litri)
           <input type="number" id="waterInput" min="0" step="0.1" required />
@@ -47,8 +48,9 @@
           <input type="number" id="transportInput" min="0" step="0.1" required />
         </label>
 
-        <button type="submit" class="calc-btn">Calculate Eco Score</button>
+        <button type="submit" id="calculateBtn" class="calc-btn">Calculate Eco Score</button>
       </form>
+      <p id="formFeedback" class="form-feedback" aria-live="polite"></p>
 
       <div class="result-block" id="resultBlock">
         <div>
@@ -74,7 +76,9 @@
           <button id="resetWeekBtn" class="ghost-btn danger" type="button">Reset săptămână</button>
         </div>
       </div>
-      <canvas id="ecoChart" aria-label="Grafic scor eco pe zile"></canvas>
+      <div class="chart-canvas-wrap">
+        <canvas id="ecoChart" aria-label="Grafic scor eco pe zile"></canvas>
+      </div>
     </section>
 
     <section class="panel recommendations-panel panel-card">

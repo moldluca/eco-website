@@ -189,6 +189,11 @@ h1 {
   cursor: pointer;
 }
 
+.guide-btn {
+  width: fit-content;
+  text-decoration: none;
+}
+
 .ghost-btn.danger {
   border-color: #d67f7f;
   color: #b43a3a;
@@ -205,6 +210,81 @@ body.dark .ghost-btn.danger {
 
 .page-main {
   padding-bottom: 2.5rem;
+}
+
+.about-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.info-section {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.tips-grid,
+.cause-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.about-grid article {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: var(--panel);
+}
+
+.tips-grid article,
+.cause-grid article {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem;
+  background: var(--panel);
+}
+
+.about-grid h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.03rem;
+}
+
+.tips-grid h3,
+.cause-grid h3,
+.info-section h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.03rem;
+}
+
+.about-grid p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tips-grid p,
+.cause-grid p,
+.info-section p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.tips-grid ul,
+.cause-grid ul,
+.compact-list {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.tips-grid li,
+.cause-grid li,
+.compact-list li {
+  margin-bottom: 0.32rem;
 }
 
 main {
@@ -275,8 +355,35 @@ main {
   color: var(--muted);
 }
 
+.form-feedback {
+  margin: 0.6rem 0 0;
+  min-height: 1.1rem;
+  color: #b43a3a;
+  font-size: 0.9rem;
+}
+
+body.dark .form-feedback {
+  color: #ff9c9c;
+}
+
 .chart-panel {
-  min-height: 270px;
+  display: flex;
+  flex-direction: column;
+  height: min(42vh, 360px);
+  min-height: 220px;
+  overflow: hidden;
+}
+
+.chart-canvas-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+}
+
+#ecoChart {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .panel-title-row {
@@ -380,6 +487,19 @@ main {
   .impact-grid {
     grid-template-columns: 1fr;
   }
+
+  .chart-panel {
+    height: min(38vh, 300px);
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tips-grid,
+  .cause-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -404,5 +524,10 @@ main {
   .eco-form,
   .result-block {
     grid-template-columns: 1fr;
+  }
+
+  .chart-panel {
+    height: min(32vh, 250px);
+    min-height: 190px;
   }
 }
