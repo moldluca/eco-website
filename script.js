@@ -480,18 +480,18 @@ function initBackgroundMotion() {
     const t = (now - startTime) / 1000;
 
     // Smooth interpolation to avoid jittery cursor-following.
-    motion.currentX += (motion.mouseX - motion.currentX) * 0.06;
-    motion.currentY += (motion.mouseY - motion.currentY) * 0.06;
+    motion.currentX += (motion.mouseX - motion.currentX) * 0.1;
+    motion.currentY += (motion.mouseY - motion.currentY) * 0.1;
 
-    const leftX = Math.sin(t * 1.15) * 44 + motion.currentX * 24;
-    const leftY = Math.cos(t * 1.35) * 30 + motion.currentY * 18;
-    const rightX = Math.cos(t * 1.05) * 38 - motion.currentX * 26;
-    const rightY = Math.sin(t * 1.2) * 32 - motion.currentY * 16;
+    const leftX = Math.sin(t * 1.5) * 66 + motion.currentX * 42;
+    const leftY = Math.cos(t * 1.7) * 46 + motion.currentY * 28;
+    const rightX = Math.cos(t * 1.4) * 60 - motion.currentX * 44;
+    const rightY = Math.sin(t * 1.55) * 48 - motion.currentY * 26;
 
-    const leftScale = 1.04 + Math.sin(t * 1.6) * 0.05;
-    const rightScale = 0.98 + Math.cos(t * 1.45) * 0.06;
-    const leftRotate = Math.sin(t * 0.9) * 4;
-    const rightRotate = Math.cos(t * 0.85) * -5;
+    const leftScale = 1.05 + Math.sin(t * 1.9) * 0.08;
+    const rightScale = 0.97 + Math.cos(t * 1.8) * 0.09;
+    const leftRotate = Math.sin(t * 1.2) * 7;
+    const rightRotate = Math.cos(t * 1.15) * -8;
 
     leftShape.style.transform = `translate3d(${leftX}px, ${leftY}px, 0) scale(${leftScale}) rotate(${leftRotate}deg)`;
     rightShape.style.transform = `translate3d(${rightX}px, ${rightY}px, 0) scale(${rightScale}) rotate(${rightRotate}deg)`;
