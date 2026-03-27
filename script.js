@@ -483,13 +483,18 @@ function initBackgroundMotion() {
     motion.currentX += (motion.mouseX - motion.currentX) * 0.06;
     motion.currentY += (motion.mouseY - motion.currentY) * 0.06;
 
-    const leftX = Math.sin(t * 0.7) * 28 + motion.currentX * 14;
-    const leftY = Math.cos(t * 0.9) * 18 + motion.currentY * 12;
-    const rightX = Math.cos(t * 0.6) * 24 - motion.currentX * 16;
-    const rightY = Math.sin(t * 0.8) * 20 - motion.currentY * 10;
+    const leftX = Math.sin(t * 1.15) * 44 + motion.currentX * 24;
+    const leftY = Math.cos(t * 1.35) * 30 + motion.currentY * 18;
+    const rightX = Math.cos(t * 1.05) * 38 - motion.currentX * 26;
+    const rightY = Math.sin(t * 1.2) * 32 - motion.currentY * 16;
 
-    leftShape.style.transform = `translate3d(${leftX}px, ${leftY}px, 0) scale(1.03)`;
-    rightShape.style.transform = `translate3d(${rightX}px, ${rightY}px, 0) scale(0.98)`;
+    const leftScale = 1.04 + Math.sin(t * 1.6) * 0.05;
+    const rightScale = 0.98 + Math.cos(t * 1.45) * 0.06;
+    const leftRotate = Math.sin(t * 0.9) * 4;
+    const rightRotate = Math.cos(t * 0.85) * -5;
+
+    leftShape.style.transform = `translate3d(${leftX}px, ${leftY}px, 0) scale(${leftScale}) rotate(${leftRotate}deg)`;
+    rightShape.style.transform = `translate3d(${rightX}px, ${rightY}px, 0) scale(${rightScale}) rotate(${rightRotate}deg)`;
 
     rafId = window.requestAnimationFrame(animate);
   };
