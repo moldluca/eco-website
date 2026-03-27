@@ -21,6 +21,7 @@ initHistoryPage();
 
 function initShared() {
   applyTheme(data.theme);
+  initBackgroundMotion();
   const themeToggle = document.getElementById("themeToggle");
   if (themeToggle) {
     themeToggle.addEventListener("click", toggleTheme);
@@ -448,4 +449,56 @@ function parseInputNumber(rawValue) {
   }
 
   return Number(normalized);
+}
+
+function initBackgroundMotion() {
+  const leftShape = document.querySelector(".bg-shape-left");
+  const rightShape = document.querySelector(".bg-shape-right");
+
+  if (!leftShape || !rightShape) {
+    return;
+  }
+
+  const motion = {
+    mouseX: 0,
+    mouseY: 0,
+    currentX: 0,
+    currentY: 0
+  };
+
+  window.addEventListener("pointermove", (event) => {
+    const x = (event.clientX / window.innerWidth - 0.5) * 2;
+    const y = (event.clientY / window.innerHeight - 0.5) * 2;
+    motion.mouseX = x;
+    motion.mouseY = y;
+  });
+
+  let rafId = 0;
+  const startTime = performance.now();
+
+  const animate = (now) => {
+    const t = (now - startTime) / 1000;
+
+    // Smooth interpolation to avoid jittery cursor-following.
+    motion.currentX += (motion.mouseX - motion.currentX) * 0.06;
+    motion.currentY += (motion.mouseY - motion.currentY) * 0.06;
+
+    const leftX = Math.sin(t * 0.7) * 28 + motion.currentX * 14;
+    const leftY = Math.cos(t * 0.9) * 18 + motion.currentY * 12;
+    const rightX = Math.cos(t * 0.6) * 24 - motion.currentX * 16;
+    const rightY = Math.sin(t * 0.8) * 20 - motion.currentY * 10;
+
+    leftShape.style.transform = `translate3d(${leftX}px, ${leftY}px, 0) scale(1.03)`;
+    rightShape.style.transform = `translate3d(${rightX}px, ${rightY}px, 0) scale(0.98)`;
+
+    rafId = window.requestAnimationFrame(animate);
+  };
+
+  rafId = window.requestAnimationFrame(animate);
+
+  window.addEventListener("beforeunload", () => {
+    if (rafId) {
+      window.cancelAnimationFrame(rafId);
+    }
+  });
 }
